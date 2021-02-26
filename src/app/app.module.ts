@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { APP_INITIALIZER, NgModule } from '@angular/core';
+import { APP_INITIALIZER, Inject, NgModule } from '@angular/core';
 
 import { AppRouting } from './app.routing';
 import { AppComponent } from './app.component';
@@ -23,7 +23,7 @@ import { SharedModule } from './shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';
 import { ZXingScannerModule } from 'angular-weblineindia-qrcode-scanner';
 import { SplashComponent } from './pages/splash/splash.component';
-import { CommonModule, HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { CommonModule, DOCUMENT, HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { AppConfigService } from './core/services/appConfig.service';
 import { CoreAuthService, CoreSiteService, WebDesignerMainIntroService } from 'ntk-cms-api';
 import { AccessHelper } from './core/helper/accessHelper';
@@ -77,4 +77,11 @@ export function appInit(appConfigService: AppConfigService) {
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+  constructor(private coreAuthService: CoreAuthService, @Inject(DOCUMENT) private document: Document, private accessHelper: AccessHelper) {
+    // karavi:Important For Test To Local Service
+    if (environment.cmsServerConfig.configApiServerPath && environment.cmsServerConfig.configApiServerPath.length > 0) {
+      this.coreAuthService.setConfig(environment.cmsServerConfig.configApiServerPath);
+    }
+  }
+}

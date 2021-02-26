@@ -1,1 +1,34 @@
 <p>home works!</p>
+<div>
+  <button type="button" (click)="onFormBarcodeReaderOn()" [disabled]="scannerEnabled" class="btn btn-raised btn-warning mr-1">
+    <i class="ft-x"></i>بارکد خوان
+  </button>
+  <button type="button" (click)="onFormBarcodeReaderOff()" [disabled]="!scannerEnabled" class="btn btn-raised btn-warning mr-1">
+    <i class="ft-x"></i>ورود شناسه
+  </button>
+  <div *ngIf="scannerEnabled">
+    <zxing-scanner [formats]="allowedFormats" [enable]="scannerEnabled" [torch]="torch"
+      (camerasNotFound)="camerasNotFoundHandler($event)" (scanSuccess)="scanSuccessHandler($event)"></zxing-scanner>
+  </div>
+  <div *ngIf="!scannerEnabled">
+    <form (ngSubmit)="onFormSubmit()" #vform="ngForm" class="form form-horizontal">
+      <mat-form-field class="example-full-width">
+        <mat-label>شناسه فروشگاه</mat-label>
+        <input matInput [(ngModel)]="modelDataShopCode" name="modelDataShopCode" #ShopCode type="text"
+          placeholder="00000" minlength="3" maxlength="10" required />
+        <mat-icon matSuffix *ngIf="modelDataShopCode" matSuffix mat-icon-button aria-label="Clear"
+          (click)="modelDataShopCode = ''">close</mat-icon>
+        <mat-icon matSuffix>mode_edit</mat-icon>
+        <mat-hint align="end">{{ ShopCode.value.length }} / 10</mat-hint>
+        <mat-error *ngIf="ShopCode.errors?.required">
+          شناسه فروشگاه الزامی است
+        </mat-error>
+      </mat-form-field>
+      <div class="form-actions" *ngIf="formInfo.FormAllowSubmit">
+        <button type="submit" class="btn btn-raised btn-primary" [disabled]="!vform.form.valid">
+          <i class="fa fa-check-square-o"></i>  بررسی
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
