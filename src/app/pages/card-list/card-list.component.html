@@ -3,7 +3,6 @@
     <div>
 
     </div>
-barcode:{{this.modelDate|json}}
 
 <zxing-scanner
 [formats]="allowedFormats"
@@ -18,4 +17,7 @@ barcode:{{this.modelDate|json}}
     (scanComplete)="scanCompleteHandler($event)"
 ></zxing-scanner>
 </div>
+<b>
+Last barcode:{{this.modelDate|json}}
+</b>
 </div>

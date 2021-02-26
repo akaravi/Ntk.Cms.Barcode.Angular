@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 
 import { AppRouting } from './app.routing';
 import { AppComponent } from './app.component';
@@ -22,7 +22,15 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from './shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';
 import { ZXingScannerModule } from 'angular-weblineindia-qrcode-scanner';
+import { SplashComponent } from './pages/splash/splash.component';
+import { CommonModule, HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { AppConfigService } from './core/services/appConfig.service';
+import { CoreAuthService, CoreSiteService, WebDesignerMainIntroService } from 'ntk-cms-api';
+import { AccessHelper } from './core/helper/accessHelper';
 
+export function appInit(appConfigService: AppConfigService) {
+  return () => appConfigService.load();
+}
 @NgModule({
   declarations: [
     AppComponent,
@@ -31,11 +39,13 @@ import { ZXingScannerModule } from 'angular-weblineindia-qrcode-scanner';
     AboutUsComponent,
     ContactUsComponent,
     NewsContentListComponent,
-    CardListComponent
+    CardListComponent,
+    SplashComponent
   ],
   imports: [
     BrowserModule,
     AppRouting,
+    CommonModule,
     FormsModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
@@ -51,7 +61,20 @@ import { ZXingScannerModule } from 'angular-weblineindia-qrcode-scanner';
 
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
-  providers: [],
+  providers: [
+    CoreAuthService,
+    CoreSiteService,
+    AppConfigService,
+    WebDesignerMainIntroService,
+    AccessHelper,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: appInit,
+      multi: true,
+      deps: [AppConfigService]
+    },
+    {provide: LocationStrategy, useClass: HashLocationStrategy}
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

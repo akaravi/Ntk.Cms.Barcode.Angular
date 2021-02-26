@@ -9,7 +9,7 @@ import { BarcodeFormat } from '@zxing/library';
 export class CardListComponent implements OnInit {
   constructor() { }
   ngOnInit(): void {
-    this.modelDate=this.allowedFormats;
+    this.modelDate='...';
   }
   modelDate: any;
 

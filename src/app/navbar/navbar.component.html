@@ -5,11 +5,11 @@
       [opened]="(isHandset$ | async) === false">
     <mat-toolbar><mat-icon>menu</mat-icon> منو</mat-toolbar>
     <mat-nav-list>
-      <a mat-list-item href="/"><mat-icon>home</mat-icon> خانه</a>
-      <a mat-list-item href="/cardlist"><mat-icon>card</mat-icon>  خرید</a>
-      <a mat-list-item href="/news"><mat-icon>history_edu</mat-icon> اخبار</a>
-      <a mat-list-item href="/contactus"><mat-icon>contact_mail</mat-icon> تماس با ما</a>
-      <a mat-list-item href="/aboutus"><mat-icon>home_work</mat-icon> درباره ما</a>
+      <a mat-list-item routerLink="/"><mat-icon>home</mat-icon> خانه</a>
+      <a mat-list-item routerLink="/cardlist"><mat-icon>card</mat-icon>  خرید</a>
+      <a mat-list-item routerLink="/news"><mat-icon>history_edu</mat-icon> اخبار</a>
+      <a mat-list-item routerLink="/contactus"><mat-icon>contact_mail</mat-icon> تماس با ما</a>
+      <a mat-list-item routerLink="/aboutus"><mat-icon>home_work</mat-icon> درباره ما</a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
