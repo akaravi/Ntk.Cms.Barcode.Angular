@@ -1,6 +1,19 @@
-<div style="width: 200px; height:200px">
-  <zxing-scanner [formats]="allowedFormats" [enable]="scannerEnabled" [torch]="torch"
-    (camerasNotFound)="camerasNotFoundHandler($event)" (scanSuccess)="scanSuccessHandler($event)"></zxing-scanner>
-    <mat-slide-toggle [(ngModel)]="torch" *ngIf="scannerEnabled" >فلش دوربین</mat-slide-toggle>
 
-  </div>
+
+<h1 mat-dialog-title>Hi {{data.name}}</h1>
+<div mat-dialog-content>
+  <p>What's your favorite animal?</p>
+  <mat-form-field>
+    <mat-label>Favorite Animal</mat-label>
+    <div style="width: 200px; height:200px">
+      <zxing-scanner [formats]="allowedFormats" [enable]="scannerEnabled" [torch]="torch"
+        (camerasNotFound)="camerasNotFoundHandler($event)" (scanSuccess)="scanSuccessHandler($event)"></zxing-scanner>
+        <mat-slide-toggle [(ngModel)]="torch" *ngIf="scannerEnabled" >فلش دوربین</mat-slide-toggle>
+
+      </div>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">No Thanks</button>
+  <button mat-button [mat-dialog-close]="data.animal" cdkFocusInitial>Ok</button>
+</div>

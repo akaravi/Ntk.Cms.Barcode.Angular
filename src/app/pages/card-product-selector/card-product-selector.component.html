@@ -1,0 +1,10 @@
+ <p>نتایج : {{title}}</p>
+ <mat-selection-list #shoes [multiple]="false">
+  <mat-list-option *ngFor="let item of dataModelList" [value]="item" (click)="openLink(item)">
+    <span mat-line>{{item.Name}}</span>
+    <span mat-line>{{item.Code}}</span>
+  </mat-list-option>
+</mat-selection-list>
+<div *ngIf="!dataModelList || dataModelList.length===0">
+  یافت نشد
+</div>

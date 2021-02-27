@@ -25,10 +25,13 @@ import { ZXingScannerModule } from 'angular-weblineindia-qrcode-scanner';
 import { SplashComponent } from './pages/splash/splash.component';
 import { CommonModule, HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { AppConfigService } from './core/services/appConfig.service';
-import { CoreAuthService, CoreSiteService, WebDesignerMainIntroService } from 'ntk-cms-api';
+import { CoreAuthService, CoreSiteService, HyperShopContentService, WebDesignerMainIntroService } from 'ntk-cms-api';
 import { AccessHelper } from './core/helper/accessHelper';
 import { CmsStoreModule } from './core/reducers/cmsStore.module';
 import { BarcodeReaderComponent } from './pages/barcode-reader/barcode-reader.component';
+import { DeviceLoginComponent } from './pages/device-login/device-login.component';
+import { MatBottomSheetModule, MAT_BOTTOM_SHEET_DEFAULT_OPTIONS } from '@angular/material/bottom-sheet';
+import { CardProductSelectorComponent } from './pages/card-product-selector/card-product-selector.component';
 
 export function appInit(appConfigService: AppConfigService) {
   return () => appConfigService.load();
@@ -43,7 +46,9 @@ export function appInit(appConfigService: AppConfigService) {
     NewsContentListComponent,
     CardListComponent,
     SplashComponent,
-    BarcodeReaderComponent
+    BarcodeReaderComponent,
+    DeviceLoginComponent,
+    CardProductSelectorComponent
   ],
   imports: [
     BrowserModule,
@@ -59,6 +64,7 @@ export function appInit(appConfigService: AppConfigService) {
     MatSidenavModule,
     MatIconModule,
     MatListModule,
+    MatBottomSheetModule,
     SharedModule.forRoot(),
     CmsStoreModule.forRoot(),
     ZXingScannerModule,
@@ -68,6 +74,7 @@ export function appInit(appConfigService: AppConfigService) {
     CoreAuthService,
     CoreSiteService,
     AppConfigService,
+    HyperShopContentService,
     WebDesignerMainIntroService,
     AccessHelper,
     {
@@ -76,7 +83,7 @@ export function appInit(appConfigService: AppConfigService) {
       multi: true,
       deps: [AppConfigService]
     },
-    { provide: LocationStrategy, useClass: HashLocationStrategy }
+    { provide: LocationStrategy, useClass: HashLocationStrategy },
   ],
   bootstrap: [AppComponent]
 })
