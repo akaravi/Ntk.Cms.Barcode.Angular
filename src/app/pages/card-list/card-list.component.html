@@ -1,12 +1,15 @@
 <p>home works!</p>
 <div>
-  <button type="button" (click)="onFormBarcodeReaderOn()" [disabled]="scannerEnabled" class="btn btn-raised btn-warning mr-1">
+  <button type="button" (click)="onFormBarcodeReaderOn()" [disabled]="scannerEnabled"
+    class="btn btn-raised btn-warning mr-1">
     <i class="ft-x"></i>بارکد خوان
   </button>
-  <button type="button" (click)="onFormBarcodeReaderOff()" [disabled]="!scannerEnabled" class="btn btn-raised btn-warning mr-1">
+  <button type="button" (click)="onFormBarcodeReaderOff()" [disabled]="!scannerEnabled"
+    class="btn btn-raised btn-warning mr-1">
     <i class="ft-x"></i>ورود شناسه
   </button>
   <div *ngIf="scannerEnabled">
+    <mat-slide-toggle [checked]="torch">فلش دوربین</mat-slide-toggle>
     <zxing-scanner [formats]="allowedFormats" [enable]="scannerEnabled" [torch]="torch"
       (camerasNotFound)="camerasNotFoundHandler($event)" (scanSuccess)="scanSuccessHandler($event)"></zxing-scanner>
   </div>
@@ -21,7 +24,7 @@
         <mat-icon matSuffix>mode_edit</mat-icon>
         <mat-hint align="end">{{ ShopCode.value.length }} / 10</mat-hint>
         <mat-error *ngIf="ShopCode.errors?.required">
-          شناسه  الزامی است
+          شناسه الزامی است
         </mat-error>
       </mat-form-field>
       <div class="form-actions" *ngIf="formInfo.FormAllowSubmit">
@@ -33,10 +36,47 @@
   </div>
   <div *ngFor="let item of modelHistoryList" (click)="onClickHistory(item)">
     {{ item }}
-    <svg (click)="onClickHistory(item)" viewBox="0 0 16 16" version="1.1"
-    width="16" height="16" aria-hidden="true">
- <path fill-rule="evenodd"
-       d="M5.75 1a.75.75 0 00-.75.75v3c0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75v-3a.75.75 0 00-.75-.75h-4.5zm.75 3V2.5h3V4h-3zm-2.874-.467a.75.75 0 00-.752-1.298A1.75 1.75 0 002 3.75v9.5c0 .966.784 1.75 1.75 1.75h8.5A1.75 1.75 0 0014 13.25v-9.5a1.75 1.75 0 00-.874-1.515.75.75 0 10-.752 1.298.25.25 0 01.126.217v9.5a.25.25 0 01-.25.25h-8.5a.25.25 0 01-.25-.25v-9.5a.25.25 0 01.126-.217z"></path>
-</svg>
+    <svg (click)="onClickHistory(item)" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">
+      <path fill-rule="evenodd"
+        d="M5.75 1a.75.75 0 00-.75.75v3c0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75v-3a.75.75 0 00-.75-.75h-4.5zm.75 3V2.5h3V4h-3zm-2.874-.467a.75.75 0 00-.752-1.298A1.75 1.75 0 002 3.75v9.5c0 .966.784 1.75 1.75 1.75h8.5A1.75 1.75 0 0014 13.25v-9.5a1.75 1.75 0 00-.874-1.515.75.75 0 10-.752 1.298.25.25 0 01.126.217v9.5a.25.25 0 01-.25.25h-8.5a.25.25 0 01-.25-.25v-9.5a.25.25 0 01.126-.217z">
+      </path>
+    </svg>
   </div>
+  <p>{{modelData.shopTitle}}</p>
+  <p>{{modelData.shopTel}}</p>
+  <table>
+    <tr>
+      <td>ر</td>
+      <td>نام کالا</td>
+      <td>تعداد</td>
+      <td>قیمت فروشگاه</td>
+      <td>قیمت روی کالا</td>
+      <td>مبلغ کل</td>
+    </tr>
+    <tr *ngFor="let item of modelData.products; index as i">
+      <td>{{i+1}}</td>
+      <td>{{item.title}}</td>
+      <td>{{item.count}}</td>
+      <td>{{item.priceOnShop}}</td>
+      <td>{{item.priceOnProduct}}</td>
+      <td>{{item.sum}}</td>
+    </tr>
+    <tr>
+      <td colspan="3">جمع بدون تخفیف</td>
+      <td colspan="3">{{modelData.sumPure}}</td>
+    </tr>
+    <tr>
+      <td colspan="3">تخفیف شما از خرید</td>
+      <td colspan="3">{{modelData.sumDiscount}}</td>
+    </tr>
+    <tr>
+      <td colspan="3">جمع فاکتور</td>
+      <td colspan="3">{{modelData.sumPay}}</td>
+    </tr>
+    <tr>
+      <td colspan="3">تعداد اقلام</td>
+      <td colspan="3">{{modelData.products.length}}</td>
+    </tr>
+  </table>
+
 </div>

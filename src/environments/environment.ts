@@ -21,6 +21,6 @@ export const environment = {
     ClientMACAddress: '',
     OSType: EnumOperatingSystemType.none,
     DeviceType: EnumDeviceType.WebSite,
-    PackageName: 'Ntk.Android.Ticketing',
+    PackageName: 'Ntk.Android.hyperShop.app',
   }
 };

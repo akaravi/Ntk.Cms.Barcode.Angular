@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ErrorExceptionResult, FilterModel, NewsContentModel, NewsContentService } from 'ntk-cms-api';
 
 @Component({
   selector: 'app-news-content-list',
@@ -6,10 +7,20 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./news-content-list.component.css']
 })
 export class NewsContentListComponent implements OnInit {
+  filterModelContent = new FilterModel();
+  dataModelResult: ErrorExceptionResult<NewsContentModel> = new ErrorExceptionResult<NewsContentModel>();
 
-  constructor() { }
+  constructor(private newsContentService: NewsContentService) {}
 
   ngOnInit(): void {
+    this.getContentList();
   }
-
+  getContentList(): void {
+    this.filterModelContent.AccessLoad = true;
+    this.newsContentService
+      .ServiceGetAll(this.filterModelContent)
+      .subscribe((res) => {
+        this.dataModelResult = res;
+      });
+  }
 }

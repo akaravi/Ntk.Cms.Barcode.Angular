@@ -5,16 +5,25 @@ import { CardListComponent } from './pages/card-list/card-list.component';
 import { ContactUsComponent } from './pages/contact-us/contact-us.component';
 import { HomeComponent } from './pages/home/home.component';
 import { NewsContentListComponent } from './pages/news-content-list/news-content-list.component';
+import { SplashComponent } from './pages/splash/splash.component';
 
 
 
 const routes: Routes = [
 
   {
+    path: 'home/:Id',
+    component: HomeComponent,
+  },
+  {
     path: '',
     pathMatch: 'full',
     component: HomeComponent,
     // resolve: {item: AppResolver}
+  },
+  {
+    path: 'splash',
+    component: SplashComponent,
   },
   {
     path: 'cardlist',

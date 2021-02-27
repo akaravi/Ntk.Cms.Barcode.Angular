@@ -1,6 +1,6 @@
 {
-  "name": "ntk-cms-hypershop-barcode",
-  "short_name": "ntk-cms-hypershop-barcode",
+  "name": "hypershop-barcode",
+  "short_name": "بارکد خوان فروشگاهی",
   "theme_color": "#1976d2",
   "background_color": "#fafafa",
   "display": "standalone",

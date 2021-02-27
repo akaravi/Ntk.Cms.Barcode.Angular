@@ -1,6 +1,6 @@
-import { HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
-import { AccessHelper } from "../helper/accessHelper";
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { AccessHelper } from '../helper/accessHelper';
 
 @Injectable()
 export class AppConfigService {

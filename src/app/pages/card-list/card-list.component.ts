@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { BarcodeFormat } from '@zxing/library';
 import { FormInfoModel } from 'ntk-cms-api';
+import { CardModel } from 'src/app/core/models/cardModel';
 
 @Component({
   selector: 'app-card-list',
@@ -17,9 +18,11 @@ export class CardListComponent implements OnInit {
   formInfo: FormInfoModel = new FormInfoModel();
   modelDataProductCode = '';
   modelHistoryList: string[];
-
+  modelData: CardModel = new CardModel();
   ngOnInit(): void {
-  }
+    this.modelData.shopTitle = 'فروشگاه بزرگ کوثر ۱۳';
+    this.modelData.shopTel = '3324497';
+    }
   onFormSubmit(): void {
     this.addHistory(this.modelDataProductCode);
 
