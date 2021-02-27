@@ -2,8 +2,10 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { CoreAuthService, EnumDeviceType, EnumOperatingSystemType, FormInfoModel, TokenDeviceClientInfoDtoModel, TokenInfoModel } from 'ntk-cms-api';
 import { BarcodeFormat } from '@zxing/library';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
+import { CmsStoreService } from 'src/app/core/reducers/cmsStore.service';
+import { ReducerCmsStore } from 'src/app/core/reducers/reducer.factory';
 
 @Component({
   selector: 'app-home',
@@ -16,61 +18,67 @@ export class HomeComponent implements OnInit {
   allowedFormats = [BarcodeFormat.QR_CODE, BarcodeFormat.EAN_13, BarcodeFormat.CODE_128, BarcodeFormat.DATA_MATRIX /*, ...*/];
   torch = false;
   currentToken: TokenInfoModel;
-  constructor(private activatedRoute: ActivatedRoute,
+  constructor(
+    private cmsStoreService: CmsStoreService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
     private coreAuthService: CoreAuthService,
   ) { }
   @ViewChild('vform', { static: false }) formGroup: FormGroup;
   formInfo: FormInfoModel = new FormInfoModel();
   modelDataShopCode: number;
+  loadingEnabled = false;
   ngOnInit(): void {
     this.requestId = Number(this.activatedRoute.snapshot.paramMap.get('Id'));
     if (this.requestId > 0) {
-      this.modelDataShopCode = this.requestId;
-      this.onFormSubmit();
+      this.ActionToken(this.requestId);
     }
-    const deviceToken = this.coreAuthService.getDeviceToken();
-    if (deviceToken && deviceToken.length > 0) {
-      this.coreAuthService.ServiceCurrentToken().subscribe(
-        (next) => {
-          if (next.IsSuccess) {
-            this.currentToken = next.Item;
-          }
-          else {
-            this.coreAuthService.setToken('', '', '');
-            this.currentToken = new TokenInfoModel();
-          }
+    const storeSnapshot = this.cmsStoreService.getStateSnapshot();
 
-        },
-        (error) => {
-          this.coreAuthService.setToken('', '', '');
-          this.currentToken = new TokenInfoModel();
-        }
-      );
+    this.cmsStoreService.getState().subscribe((next) => {
+        this.checkStore(next);
+    });
+  }
+  checkStore(storeSnapshot: ReducerCmsStore){
+    if (storeSnapshot && storeSnapshot.tokenInfoState && storeSnapshot.tokenInfoState.SiteId && storeSnapshot.tokenInfoState.SiteId > 0) {
+      this.currentToken = storeSnapshot.tokenInfoState;
+      this.scannerEnabled = false;
+      return;
+    } else {
+      this.scannerEnabled = true;
     }
   }
   onFormSubmit(): void {
-    if (this.modelDataShopCode <= 0) {
-      return;
+    if (this.modelDataShopCode > 0) {
+      this.ActionToken(this.modelDataShopCode);
     }
+  }
+  ActionToken(shopCode: number): void {
+
     const model: TokenDeviceClientInfoDtoModel = new TokenDeviceClientInfoDtoModel();
     model.SecurityKey = environment.cmsTokenConfig.SecurityKey;
-    model.PackageName = environment.cmsTokenConfig.PackageName + this.modelDataShopCode;
+    model.PackageName = environment.cmsTokenConfig.PackageName + shopCode;
     model.OSType = EnumOperatingSystemType.none;
     model.DeviceType = EnumDeviceType.WebSite;
+    this.loadingEnabled = true;
     this.coreAuthService.ServiceGetTokenDevice(model).subscribe(
       (next) => {
         if (next.IsSuccess) {
           this.currentToken = next.Item;
+          this.cmsStoreService.setState({ tokenInfoState: next.Item });
+          this.scannerEnabled = false;
         }
+        this.loadingEnabled = false;
       },
       (error) => {
-
+        this.loadingEnabled = false;
       }
     );
 
   }
   onLogout(): void {
     this.coreAuthService.setToken('', '', '');
+    this.scannerEnabled = true;
     this.currentToken = new TokenInfoModel();
   }
   onFormBarcodeReaderOn(): void {
@@ -80,10 +88,23 @@ export class HomeComponent implements OnInit {
     this.scannerEnabled = false;
   }
   scanSuccessHandler($event): void {
-    this.modelDataShopCode = $event;
-    this.scannerEnabled = false;
+    debugger
+    const str = $event + '';
+    if (str.indexOf('://') > 0) {
+      const strList = str.split('/');
+      if (strList.length > 0) {
+        const code = + strList[strList.length - 1];
+        if (code > 0) {
+          this.ActionToken(code);
+
+        }
+      }
+    }
   }
   camerasNotFoundHandler($event): void {
     alert('دوربین شما برای بررسی بارکد شناخته نشد');
+  }
+  onActionStart(): void{
+    this.router.navigate(['cardlist']);
   }
 }

@@ -27,6 +27,8 @@ import { CommonModule, HashLocationStrategy, LocationStrategy } from '@angular/c
 import { AppConfigService } from './core/services/appConfig.service';
 import { CoreAuthService, CoreSiteService, WebDesignerMainIntroService } from 'ntk-cms-api';
 import { AccessHelper } from './core/helper/accessHelper';
+import { CmsStoreModule } from './core/reducers/cmsStore.module';
+import { BarcodeReaderComponent } from './pages/barcode-reader/barcode-reader.component';
 
 export function appInit(appConfigService: AppConfigService) {
   return () => appConfigService.load();
@@ -40,7 +42,8 @@ export function appInit(appConfigService: AppConfigService) {
     ContactUsComponent,
     NewsContentListComponent,
     CardListComponent,
-    SplashComponent
+    SplashComponent,
+    BarcodeReaderComponent
   ],
   imports: [
     BrowserModule,
@@ -57,8 +60,8 @@ export function appInit(appConfigService: AppConfigService) {
     MatIconModule,
     MatListModule,
     SharedModule.forRoot(),
+    CmsStoreModule.forRoot(),
     ZXingScannerModule,
-
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [

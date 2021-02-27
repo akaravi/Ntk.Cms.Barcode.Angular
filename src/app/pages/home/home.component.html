@@ -1,41 +1,60 @@
-<div *ngIf="!currentToken ||!currentToken.SiteId || currentToken.SiteId <= 0">
-  <button type="button" (click)="onFormBarcodeReaderOn()" [disabled]="scannerEnabled" class="btn btn-raised btn-warning mr-1">
-    <i class="ft-x"></i>بارکد خوان
-  </button>
-  <button type="button" (click)="onFormBarcodeReaderOff()" [disabled]="!scannerEnabled" class="btn btn-raised btn-warning mr-1">
-    <i class="ft-x"></i>ورود شناسه
-  </button>
-  <div *ngIf="scannerEnabled">
-    <mat-slide-toggle [checked]="torch">فلش دوربین</mat-slide-toggle>
-    <zxing-scanner [formats]="allowedFormats" [enable]="scannerEnabled" [torch]="torch"
-      (camerasNotFound)="camerasNotFoundHandler($event)" (scanSuccess)="scanSuccessHandler($event)"></zxing-scanner>
-  </div>
-  <div *ngIf="!scannerEnabled">
-    <form (ngSubmit)="onFormSubmit()" #vform="ngForm" class="form form-horizontal">
-      <mat-form-field class="example-full-width">
-        <mat-label>شناسه فروشگاه</mat-label>
-        <input matInput [(ngModel)]="modelDataShopCode" name="modelDataShopCode" #ShopCode type="number"
-          placeholder="00000" minlength="2" maxlength="10" required />
-        <mat-icon matSuffix *ngIf="modelDataShopCode" matSuffix mat-icon-button aria-label="Clear"
-          (click)="modelDataShopCode = null">close</mat-icon>
-        <mat-icon matSuffix>mode_edit</mat-icon>
-        <mat-hint align="end">{{ ShopCode.value.length }} / 10</mat-hint>
-        <mat-error *ngIf="ShopCode.errors?.required">
-          شناسه فروشگاه الزامی است
-        </mat-error>
-      </mat-form-field>
-      <div class="form-actions" *ngIf="formInfo.FormAllowSubmit">
-        <button type="submit" class="btn btn-raised btn-primary" [disabled]="!vform.form.valid">
-          <i class="fa fa-check-square-o"></i>  بررسی
-        </button>
-      </div>
-    </form>
+<div *ngIf="scannerEnabled">
+  <div>
+    برای شناسایی فروشگاهی که در آن هستید
+    <br>
+    لطفا بارکد ورودی فروشگاه را با تلفن همراه خود اسکن کنید.
   </div>
 </div>
-<div *ngIf="currentToken &&currentToken.SiteId>0">
-<table><tr><td>فروشگاه</td><td>{{currentToken.Title}}</td></tr></table>
-<button type="button" (click)="onLogout()" class="btn btn-raised btn-warning mr-1">
-  <i class="ft-x"></i>خروج از فروشگاه
-</button>
+<app-barcode-reader *ngIf="scannerEnabled" (optionSelect)="scanSuccessHandler($event)"></app-barcode-reader>
+<div *ngIf="loadingEnabled">
+  <img src="src/assets/images/loading.gif" alt="loading">
 </div>
-{{currentToken|json}}
+<div *ngIf="!loadingEnabled">
+  <div *ngIf="!currentToken ||!currentToken.SiteId || currentToken.SiteId <= 0">
+    <div *ngIf="!scannerEnabled">
+      <form (ngSubmit)="onFormSubmit()" #vform="ngForm" class="form form-horizontal">
+        <mat-form-field class="example-full-width">
+          <mat-label>شناسه فروشگاه</mat-label>
+          <input matInput [(ngModel)]="modelDataShopCode" name="modelDataShopCode" #ShopCode type="number"
+            placeholder="00000" minlength="2" maxlength="10" required />
+          <mat-icon matSuffix *ngIf="modelDataShopCode" matSuffix mat-icon-button aria-label="Clear"
+            (click)="modelDataShopCode = null">close</mat-icon>
+          <mat-icon matSuffix>mode_edit</mat-icon>
+          <mat-hint align="end">{{ ShopCode.value.length }} / 10</mat-hint>
+          <mat-error *ngIf="ShopCode.errors?.required">
+            شناسه فروشگاه الزامی است
+          </mat-error>
+        </mat-form-field>
+        <div class="form-actions" *ngIf="formInfo.FormAllowSubmit">
+          <button type="submit" class="btn btn-raised btn-primary" [disabled]="!vform.form.valid">
+            <i class="fa fa-check-square-o"></i> بررسی شناسه فروشگاه
+          </button>
+        </div>
+      </form>
+    </div>
+    <button type="button" (click)="onFormBarcodeReaderOn()" [disabled]="scannerEnabled"
+      class="btn btn-raised btn-warning mr-1">
+      <i class="ft-x"></i>خواندن شناسه فروشگاه با دوربین
+    </button>
+    <br>
+    <button type="button" (click)="onFormBarcodeReaderOff()" [disabled]="!scannerEnabled"
+      class="btn btn-raised btn-warning mr-1">
+      <i class="ft-x"></i>ورود شناسه فروشگاه با عدد
+    </button>
+  </div>
+  <div *ngIf="currentToken &&currentToken.SiteId>0">
+    <table>
+      <tr>
+        <td>فروشگاه</td>
+        <td>{{currentToken.Title}}</td>
+      </tr>
+    </table>
+    <button type="button" (click)="onLogout()" class="btn btn-raised btn-warning mr-1">
+      <i class="ft-x"></i>خروج از فروشگاه
+    </button>
+    <button type="button" (click)="onActionStart()"
+    class="btn btn-raised btn-warning mr-1">
+    <i class="ft-x"></i>شروع خرید</button>
+  </div>
+
+</div>

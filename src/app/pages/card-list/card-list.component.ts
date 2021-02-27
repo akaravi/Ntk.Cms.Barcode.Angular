@@ -49,7 +49,6 @@ export class CardListComponent implements OnInit {
   }
   addHistory(item: string): void {
     let history = localStorage.getItem('history');
-    // debugger;
     if (history && history.length > 0) {
       if (history.indexOf(item) < 0) {
         history = item + ',' + history;
@@ -66,7 +65,6 @@ export class CardListComponent implements OnInit {
   }
   removeHistory(item: string): void {
     let history = localStorage.getItem('history');
-    // debugger;
     if (history && history.length > 0) {
       if (history.indexOf(item) < 0) {
         history = item + ',' + history;

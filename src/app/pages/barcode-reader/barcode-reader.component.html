@@ -1,0 +1,6 @@
+<div style="width: 200px; height:200px">
+  <zxing-scanner [formats]="allowedFormats" [enable]="scannerEnabled" [torch]="torch"
+    (camerasNotFound)="camerasNotFoundHandler($event)" (scanSuccess)="scanSuccessHandler($event)"></zxing-scanner>
+    <mat-slide-toggle [(ngModel)]="torch" *ngIf="scannerEnabled" >فلش دوربین</mat-slide-toggle>
+
+  </div>
