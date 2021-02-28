@@ -12,23 +12,26 @@ import { ReducerCmsStore } from 'src/app/core/reducers/reducer.factory';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-  currentToken: TokenInfoModel;
   constructor(
     private cmsStoreService: CmsStoreService,
     private router: Router,
     private coreAuthService: CoreAuthService,
-  ) { }
-  @ViewChild('vform', { static: false }) formGroup: FormGroup;
-  formInfo: FormInfoModel = new FormInfoModel();
-  loadingEnabled = false;
-  ngOnInit(): void {
-
+  ) {
     const storeSnapshot = this.cmsStoreService.getStateSnapshot();
     this.checkStore(storeSnapshot);
 
     this.cmsStoreService.getState().subscribe((next) => {
         this.checkStore(next);
     });
+   }
+  @ViewChild('vform', { static: false }) formGroup: FormGroup;
+  formInfo: FormInfoModel = new FormInfoModel();
+  loadingEnabled = false;
+  currentToken: TokenInfoModel;
+
+  ngOnInit(): void {
+
+
   }
   checkStore(storeSnapshot: ReducerCmsStore){
     if (storeSnapshot && storeSnapshot.tokenInfoState && storeSnapshot.tokenInfoState.SiteId && storeSnapshot.tokenInfoState.SiteId > 0) {

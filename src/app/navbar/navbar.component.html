@@ -4,7 +4,7 @@
       [mode]="(isHandset$ | async) ? 'over' : 'side'"
       [opened]="(isHandset$ | async) === false">
     <mat-toolbar><mat-icon>menu</mat-icon> منو</mat-toolbar>
-    <mat-nav-list>
+    <mat-nav-list (click)="onActionClick(drawer)" >
       <a mat-list-item routerLink="/"><mat-icon>home</mat-icon> خانه</a>
       <a mat-list-item routerLink="/cardlist"><mat-icon>shopping_cart</mat-icon>  خرید</a>
       <a mat-list-item routerLink="/news"><mat-icon>history_edu</mat-icon> اخبار</a>
@@ -23,9 +23,7 @@
         *ngIf="isHandset$ | async">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
-
       <button mat-button routerLink="/">{{title}}</button>
-
     </mat-toolbar>
     <!-- Add Content Here -->
     <router-outlet></router-outlet>

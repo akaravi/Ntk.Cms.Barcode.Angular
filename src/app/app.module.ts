@@ -25,7 +25,7 @@ import { ZXingScannerModule } from 'angular-weblineindia-qrcode-scanner';
 import { SplashComponent } from './pages/splash/splash.component';
 import { CommonModule, HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { AppConfigService } from './core/services/appConfig.service';
-import { CoreAuthService, CoreSiteService, HyperShopContentService, WebDesignerMainIntroService } from 'ntk-cms-api';
+import { CoreAuthService, CoreSiteService, HyperShopContentService, NewsContentService, WebDesignerMainIntroService } from 'ntk-cms-api';
 import { AccessHelper } from './core/helper/accessHelper';
 import { CmsStoreModule } from './core/reducers/cmsStore.module';
 import { BarcodeReaderComponent } from './pages/barcode-reader/barcode-reader.component';
@@ -76,6 +76,7 @@ export function appInit(appConfigService: AppConfigService) {
     AppConfigService,
     HyperShopContentService,
     WebDesignerMainIntroService,
+    NewsContentService,
     AccessHelper,
     {
       provide: APP_INITIALIZER,

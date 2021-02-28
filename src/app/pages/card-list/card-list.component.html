@@ -21,7 +21,7 @@
       <mat-form-field class="example-full-width">
         <mat-label>شناسه / نام محصول</mat-label>
         <input matInput [(ngModel)]="modelDataProductCode" name="modelDataProductCode" #ShopCode type="text"
-          placeholder="00000" minlength="3" maxlength="10" required />
+          placeholder="00000" minlength="3" maxlength="20" required />
         <mat-icon matSuffix *ngIf="modelDataProductCode" matSuffix mat-icon-button aria-label="Clear"
           (click)="modelDataProductCode = ''">close</mat-icon>
         <mat-icon matSuffix>mode_edit</mat-icon>
@@ -37,8 +37,8 @@
       </div>
     </form>
   </div>
-  <p>{{modelData.shopTitle}}</p>
-  <p>{{modelData.shopTel}}</p>
+  <p>{{currentToken.Title}}</p>
+
   <table>
     <tr>
       <td>ر</td>

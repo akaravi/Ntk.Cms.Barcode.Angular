@@ -105,6 +105,7 @@ export class DeviceLoginComponent  implements OnInit {
     }
   }
   camerasNotFoundHandler($event): void {
+    this.scannerEnabled = false;
     alert('دوربین شما برای بررسی بارکد شناخته نشد');
   }
   onActionStart(): void{

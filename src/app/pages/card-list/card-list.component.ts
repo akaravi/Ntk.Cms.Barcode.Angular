@@ -1,11 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { BarcodeFormat } from '@zxing/library';
-import { EnumFilterDataModelSearchTypes, FilterDataModel, FilterModel, FormInfoModel, HyperShopContentModel, HyperShopContentService } from 'ntk-cms-api';
+import { EnumFilterDataModelSearchTypes, FilterDataModel, FilterModel, FormInfoModel, HyperShopContentModel, HyperShopContentService, TokenInfoModel } from 'ntk-cms-api';
 import { CardModel } from 'src/app/core/models/cardModel';
 import { MatBottomSheet, MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { CardProductSelectorComponent } from '../card-product-selector/card-product-selector.component';
 import { ProductModel } from 'src/app/core/models/ProductModel';
+import { CmsStoreService } from 'src/app/core/reducers/cmsStore.service';
+import { ReducerCmsStore } from 'src/app/core/reducers/reducer.factory';
 
 @Component({
   selector: 'app-card-list',
@@ -19,15 +21,29 @@ export class CardListComponent implements OnInit {
   scannerAutofocusEnabled = true;
   scannerAutostartEnabled = true;
   constructor(private hyperShopContentService: HyperShopContentService,
+    private cmsStoreService: CmsStoreService,
     private bottomSheet: MatBottomSheet,
-  ) { }
+  ) {
+    const storeSnapshot = this.cmsStoreService.getStateSnapshot();
+    this.checkStore(storeSnapshot);
+
+    this.cmsStoreService.getState().subscribe((next) => {
+        this.checkStore(next);
+    });
+  }
+  currentToken: TokenInfoModel;
+
+  checkStore(storeSnapshot: ReducerCmsStore){
+    if (storeSnapshot && storeSnapshot.tokenInfoState && storeSnapshot.tokenInfoState.SiteId && storeSnapshot.tokenInfoState.SiteId > 0) {
+      this.currentToken = storeSnapshot.tokenInfoState;
+      return;
+    }
+  }
   @ViewChild('vform', { static: false }) formGroup: FormGroup;
   formInfo: FormInfoModel = new FormInfoModel();
   modelDataProductCode = '';
   modelData: CardModel = new CardModel();
   ngOnInit(): void {
-    this.modelData.shopTitle = 'فروشگاه بزرگ کوثر ۱۳';
-    this.modelData.shopTel = '3324497';
     this.getHistory();
   }
   onFormSubmit(): void {
@@ -40,24 +56,23 @@ export class CardListComponent implements OnInit {
     this.hyperShopContentService.ServiceGetAll(filteModelContent).subscribe(
       (next) => {
         // debugger
-        const aaa = new HyperShopContentModel();
-        aaa.Code = '1234';
-        aaa.Name = 'پرتقال';
-        aaa.Price = 1200;
-        const ListItems = [];
+        // const aaa = new HyperShopContentModel();
+        // aaa.Code = '1234';
+        // aaa.Name = 'پرتقال';
+        // aaa.Price = 1200;
+        // const ListItems = [];
 
-        ListItems.push(aaa);
-        ListItems.push(aaa);
-        ListItems.push(aaa);
-        ListItems.push(aaa);
-        ListItems.push(aaa);
-        ListItems.push(aaa);
+        // ListItems.push(aaa);
+        // ListItems.push(aaa);
+        // ListItems.push(aaa);
+        // ListItems.push(aaa);
+        // ListItems.push(aaa);
+        // ListItems.push(aaa);
         const bottomSheetRef = this.bottomSheet.open(CardProductSelectorComponent, {
           // data: { list: next.ListItems }
-          data: {list:ListItems,title:this.modelDataProductCode}
+          data: { list: next.ListItems, title: this.modelDataProductCode }
         });
         bottomSheetRef.afterDismissed().subscribe((result) => {
-          debugger
           if (result && result.event && result.event.Code) {
             const selected = result.event as HyperShopContentModel;
             const product = new ProductModel();
@@ -67,6 +82,8 @@ export class CardListComponent implements OnInit {
             product.priceOnProduct = selected.Price;
             product.priceOnShop = selected.SalePrice;
             this.addHistory(product);
+            this.getHistory();
+
           }
         });
 
@@ -86,24 +103,23 @@ export class CardListComponent implements OnInit {
     filteModelContent.Filters.push(filter);
     this.hyperShopContentService.ServiceGetAll(filteModelContent).subscribe(
       (next) => {
-        const aaa = new HyperShopContentModel();
-        aaa.Code = '1234';
-        aaa.Name = 'پرتقال';
-        aaa.Price = 1200;
-        const ListItems = [];
+        // const aaa = new HyperShopContentModel();
+        // aaa.Code = '1234';
+        // aaa.Name = 'پرتقال';
+        // aaa.Price = 1200;
+        // const ListItems = [];
 
-        ListItems.push(aaa);
-        ListItems.push(aaa);
-        ListItems.push(aaa);
-        ListItems.push(aaa);
-        ListItems.push(aaa);
-        ListItems.push(aaa);
+        // ListItems.push(aaa);
+        // ListItems.push(aaa);
+        // ListItems.push(aaa);
+        // ListItems.push(aaa);
+        // ListItems.push(aaa);
+        // ListItems.push(aaa);
         const bottomSheetRef = this.bottomSheet.open(CardProductSelectorComponent, {
           // data: { list: next.ListItems }
-          data: {list:ListItems,title:$event}
+          data: { list: next.ListItems, title: $event }
         });
         bottomSheetRef.afterDismissed().subscribe((result) => {
-          debugger
           if (result && result.event && result.event.Code) {
             const selected = result.event as HyperShopContentModel;
             const product = new ProductModel();
@@ -113,6 +129,8 @@ export class CardListComponent implements OnInit {
             product.priceOnProduct = selected.Price;
             product.priceOnShop = selected.SalePrice;
             this.addHistory(product);
+            this.getHistory();
+
           }
         });
       },
@@ -124,6 +142,8 @@ export class CardListComponent implements OnInit {
 
   camerasNotFoundHandler($event): void {
     alert('دوربین شما برای بررسی بارکد شناخته نشد');
+    this.scannerEnabled = false;
+
   }
   onFormBarcodeReaderOn(): void {
     this.scannerEnabled = true;
@@ -174,6 +194,11 @@ export class CardListComponent implements OnInit {
     } else {
       this.modelData.products = [];
     }
-
+    this.modelData.sumPure = 0;
+    this.modelData.products.forEach(element => {
+      element.sum = element.cont * element.priceOnShop;
+      this.modelData.sumPure = this.modelData.sumPure + element.sum;
+    });
+    this.modelData.sumPay = this.modelData.sumPure;
   }
 }

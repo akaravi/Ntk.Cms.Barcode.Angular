@@ -9,13 +9,21 @@ import { map, shareReplay } from 'rxjs/operators';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent {
-
+  private _isHandset = false;
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
-      map(result => result.matches),
+      map(result => {
+        this._isHandset = result.matches;
+        return result.matches;
+      }),
       shareReplay()
     );
 
-  constructor(private breakpointObserver: BreakpointObserver) {}
+  constructor(private breakpointObserver: BreakpointObserver) { }
   title = 'بارکدخوان فروشگاهی';
+  onActionClick(drawer: any) {
+    if (this._isHandset) {
+      drawer.toggle()
+    }
+  }
 }
