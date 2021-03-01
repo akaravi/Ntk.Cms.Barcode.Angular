@@ -6,7 +6,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { CmsStoreService } from 'src/app/core/reducers/cmsStore.service';
 import { ReducerCmsStore } from 'src/app/core/reducers/reducer.factory';
-import { BarcodeReaderComponent } from '../barcode-reader/barcode-reader.component';
 
 @Component({
   selector: 'app-device-login',
