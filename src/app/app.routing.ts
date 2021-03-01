@@ -11,9 +11,13 @@ import { SplashComponent } from './pages/splash/splash.component';
 
 
 const routes: Routes = [
-
   {
     path: '',
+    pathMatch: 'full',
+    component: SplashComponent,
+  },
+  {
+    path: 'home',
     component: HomeComponent,
   },
   {
@@ -23,15 +27,6 @@ const routes: Routes = [
   {
     path: 'devicelogin/:Id',
     component: DeviceLoginComponent,
-  },
-  {
-    path: '',
-    pathMatch: 'full',
-    component: HomeComponent,
-  },
-  {
-    path: 'splash',
-    component: SplashComponent,
   },
   {
     path: 'cardlist',
@@ -50,7 +45,6 @@ const routes: Routes = [
     component: NewsContentListComponent,
   },
 ];
-
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],

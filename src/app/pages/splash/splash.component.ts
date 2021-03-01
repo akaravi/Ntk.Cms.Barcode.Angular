@@ -8,11 +8,17 @@ import { Router } from '@angular/router';
 })
 export class SplashComponent implements OnInit {
 
-  constructor(private router: Router) { }
+  constructor(private router: Router) {
+    const splash = localStorage.getItem('splash');
+    if (splash && splash.length > 0) {
+     // todo: karavi this.router.navigate(['home']);
+    }
+   }
 
   ngOnInit(): void {
   }
   onActionStart(): void{
-    this.router.navigate(['/']);
+    localStorage.setItem('splash', '1');
+    this.router.navigate(['home']);
   }
 }

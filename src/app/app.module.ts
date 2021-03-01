@@ -32,6 +32,8 @@ import { BarcodeReaderComponent } from './pages/barcode-reader/barcode-reader.co
 import { DeviceLoginComponent } from './pages/device-login/device-login.component';
 import { MatBottomSheetModule, MAT_BOTTOM_SHEET_DEFAULT_OPTIONS } from '@angular/material/bottom-sheet';
 import { CardProductSelectorComponent } from './pages/card-product-selector/card-product-selector.component';
+import { NewsContentViewComponentComponent } from './pages/news-content-view-component/news-content-view-component.component';
+import { NewsContentViewComponent } from './pages/news-content-view/news-content-view.component';
 
 export function appInit(appConfigService: AppConfigService) {
   return () => appConfigService.load();
@@ -48,7 +50,9 @@ export function appInit(appConfigService: AppConfigService) {
     SplashComponent,
     BarcodeReaderComponent,
     DeviceLoginComponent,
-    CardProductSelectorComponent
+    CardProductSelectorComponent,
+    NewsContentViewComponentComponent,
+    NewsContentViewComponent
   ],
   imports: [
     BrowserModule,
